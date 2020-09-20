@@ -19,12 +19,6 @@ module.exports = {
       filename: 'index.html',
       title: 'Index Page',
     },
-    admin: {
-      entry: 'src/pages/admin/admin.js',
-      template: 'src/pages/admin/admin.html',
-      filename: 'admin.html',
-      title: 'Admin Page',
-    },
     //   subpage: 'src/subpage/main.js'
   },
   publicPath: './' //打包文件路径
