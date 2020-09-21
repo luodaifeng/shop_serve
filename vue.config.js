@@ -3,7 +3,7 @@ module.exports = {
     open: true, //自动打开页面
     proxy: {
       '/': {
-        target: 'http://127.0.0.1/', //后台接口
+        target: 'http://127.0.0.1:8888/api/private/v1', //后台接口
         ws: true, //是否跨域
         changeOrigin: true,
         pathRewrite: {

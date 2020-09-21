@@ -6,6 +6,7 @@ import store from './store'
 import '../script/axios/index'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-default/index.css'
+import './assets/css/global.css'
 Vue.use(ElementUI)
 Vue.config.productionTip = false
 
