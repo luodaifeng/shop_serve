@@ -16,15 +16,16 @@
           :unique-opened="true"
           :collapse="isCollapse"
           :collapse-transition="false"
+          :router = true
         >
           <el-submenu :index="index+'1'" v-for="(item,index) in menuList" :key="item.id">
             <!-- 一级菜单 -->
             <template slot="title">
-              <i class="el-icon-star-off" style="margin-right:20px"></i>
+              <i :class="iconfont[item.id]" style="margin-right:20px"></i>
               <span>{{item.authName}}</span>
             </template>
             <!-- 二级菜单 -->
-            <el-menu-item :index="index+'1'" v-for="(item,index) in item.children" :key="item.id">
+            <el-menu-item :index="'/'+item.path" v-for="(item) in item.children" :key="item.id">
               <template slot="title">
                 <i class="el-icon-menu"></i>
                 <span>{{item.authName}}</span>
@@ -33,7 +34,9 @@
           </el-submenu>
         </el-menu>
       </div>
-      <div class="right"></div>
+      <div class="right">
+        <router-view></router-view> 
+      </div>
     </main>
   </div>
 </template>
@@ -42,7 +45,7 @@ export default {
   data() {
     return {
       menuList: [], //左侧菜单数据
-      iconfont: {
+      iconfont: { //一级菜单的小图标
         125: "el-icon-user-solid",
         103: "el-icon-s-help",
         101: "el-icon-s-goods",
@@ -78,7 +81,7 @@ export default {
   },
 };
 </script>
-<style lang="less" scope>
+<style lang="less" scoped>
 header {
   width: 100%;
   height: 80px;
