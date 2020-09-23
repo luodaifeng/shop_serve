@@ -10,6 +10,8 @@ import 'element-ui/lib/theme-chalk/index.css';
 import { MessageBox } from 'element-ui';
 Vue.use(ElementUI,MessageBox)
 Vue.config.productionTip = false
+import tree from 'vue-table-with-tree-grid'
+Vue.component('tree', tree)
 
 new Vue({
   router,
