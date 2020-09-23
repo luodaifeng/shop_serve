@@ -41,7 +41,7 @@
                 <i class="el-icon-edit"></i>
               </el-button>
               <!-- 分配角色按钮 -->
-              <el-button type="warning" size="mini">
+              <el-button type="warning" size="mini" @click="assignRole(scope.row)">
                 <i class="el-icon-setting"></i>
               </el-button>
               <!-- 删除按钮 -->
@@ -112,6 +112,31 @@
         <el-button type="primary" @click="submitData(reviseForm)">确 定</el-button>
       </span>
     </el-dialog>
+
+    <!-- 分配角色对话框 -->
+    <el-dialog title="分配角色" :visible.sync="dialogVisible3" width="50%">
+      <!-- 主体内容 -->
+      <div>
+        <p>当前的用户:{{userInfo.username}}</p>
+        <p>当前的角色:{{userInfo.role_name}}</p>
+        <p>
+          分配新角色:
+          <!-- 下拉菜单 -->
+          <el-select placeholder="请选择" v-model="selectMain">
+            <el-option
+              v-for="item in rolesList"
+              :key="item.id"
+              :label="item.roleName"
+              :value="item.id"
+            ></el-option>
+          </el-select>
+        </p>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible3 = false">取 消</el-button>
+        <el-button type="primary" @click="saveRolesInfo">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -143,16 +168,21 @@ export default {
       usersList: [],
       total: 0,
       dialogVisible: false, //添加用户弹出框
-      dialogVisible2:false,
-      userForm: { //添加用户
+      dialogVisible2: false, //修改用户弹出框
+      dialogVisible3: false, //分配角色弹出框
+      userForm: {
+        //添加用户
         username: "",
         email: "",
         mobile: "",
         password: "",
       },
-      reviseForm:{ //修改用户获取到的数据请求
-       
+      reviseForm: {
+        //修改用户获取到的数据请求
       },
+      userInfo: "", //需要被分配角色的用户信息
+      rolesList: "", //角色列表数据
+      selectMain: "", //下拉菜单的数据的id值
       rules: {
         username: [
           { required: true, message: "请输入用户名", trigger: "blur" },
@@ -227,8 +257,9 @@ export default {
     },
     submitForm(userForm) {
       //添加弹出框的确定按钮
-      this.$refs[userForm].validate(async (valid) => { //判断是否通过正则
-        if (valid) { 
+      this.$refs[userForm].validate(async (valid) => {
+        //判断是否通过正则
+        if (valid) {
           const { data: res } = await this.axios.post("users", this.userForm); //获取后台数据,并且添加用户
           if (res.meta.status !== 201) return this.$message.error(res.meta.msg); //判断状态码
           this.$message({
@@ -236,7 +267,7 @@ export default {
             type: "success",
           });
           this.dialogVisible = false; //关闭对话框
-          this.getUserList() //重新获取用户列表
+          this.getUserList(); //重新获取用户列表
           this.$refs[userForm].resetFields(); //清空输入框
         } else {
           return false;
@@ -248,58 +279,96 @@ export default {
       this.$refs[userForm].resetFields(); //清空input数据
       this.dialogVisible = false;
     },
-    editData(id){//获取要修改的数据
-      this.dialogVisible2 = true
-      this.axios.get('users/'+ id).then(res=>{
-        console.log(res.data.data);
-        if(res.data.meta.status !==200) return this.$message.error(res.meta.msg);
-        this.reviseForm = res.data.data
-      })
+    editData(id) {
+      //获取要修改的数据
+      this.dialogVisible2 = true;
+      this.axios.get("users/" + id).then((res) => {
+        if (res.data.meta.status !== 200)
+          return this.$message.error(res.meta.msg);
+        this.reviseForm = res.data.data;
+      });
     },
-     editForms(reviseForm){//修改框关闭后的回调，将input清空
-   this.$refs[reviseForm].resetFields()
-  },
-  submitData(reviseForm){//修改框的提交按钮
-     this.$refs[reviseForm].validate(async valid => { //判断是否通过正则
-        if (valid) { //修改用户信息，并且提交修改
-      const {data:res} = await this.axios.put('users/'+this.reviseForm.id,{'email':this.reviseForm.email,
-          'mobile':this.reviseForm.mobile})
-          if(res.meta.status !==200) return this.$message.error(res.meta.msg); //失败的时候抛出错误
-           this.$message({
+    editForms(reviseForm) {
+      //修改框关闭后的回调，将input清空
+      this.$refs[reviseForm].resetFields();
+    },
+    submitData(reviseForm) {
+      //修改框的提交按钮
+      this.$refs[reviseForm].validate(async (valid) => {
+        //判断是否通过正则
+        if (valid) {
+          //修改用户信息，并且提交修改
+          const { data: res } = await this.axios.put(
+            "users/" + this.reviseForm.id,
+            { email: this.reviseForm.email, mobile: this.reviseForm.mobile }
+          );
+          if (res.meta.status !== 200) return this.$message.error(res.meta.msg); //失败的时候抛出错误
+          this.$message({
             message: "修改用户成功！！！",
             type: "success",
           });
           this.dialogVisible2 = false; //关闭对话框
-          this.getUserList() //重新获取用户列表
+          this.getUserList(); //重新获取用户列表
           this.$refs[reviseForm].resetFields(); //清空输入框
         } else {
           return false;
         }
       });
     },
-    deleteData(id) { //删除按钮
-        this.$confirm('此操作将永久删除该用户吗？？？, 是否继续?', '提示', { //是否删除弹框
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.axios.delete('users/'+id).then(res=>{ //点击确定按钮后，从数据库删除数据
+    deleteData(id) {
+      //删除按钮
+      this.$confirm("此操作将永久删除该用户吗？？？, 是否继续?", "提示", {
+        //是否删除弹框
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(() => {
+          this.axios.delete("users/" + id).then((res) => {
+            //点击确定按钮后，从数据库删除数据
             console.log(res.data);
-            if(res.data.meta.status !==200) return this.$message.error('删除用户失败！！！'); //失败的时候抛出错误
-            this.getUserList() //重新获取用户列表
-          })
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
+            if (res.data.meta.status !== 200)
+              return this.$message.error("删除用户失败！！！"); //失败的时候抛出错误
+            this.getUserList(); //重新获取用户列表
           });
-        }).catch(() => {
           this.$message({
-            type: 'info',
-            message: '已取消删除'
-          });          
+            type: "success",
+            message: "删除成功!",
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除",
+          });
         });
-      }
-    }
+    },
+    async assignRole(row) {
+      //分配角色按钮
+      this.userInfo = row;
+      //获取角色列表
+      const { data: res } = await this.axios.get("roles");
+      if (res.meta.status !== 200)
+        return this.$message.error("获取角色列表失败！！！");
+      this.rolesList = res.data;
+      this.dialogVisible3 = true;
+    },
+    async saveRolesInfo() {
+      //分配角色点击按钮
+      if (!this.selectMain)
+        return this.$message.error("用户数据不能为空！！！");
+      const {
+        data: res,
+      } = await this.axios.put(`users/${this.userInfo.id}/role`, {
+        rid: this.selectMain,
+      });
+      if (res.meta.status !== 200)
+        return this.$message.error("更新角色失败！！！");
+      this.$message.success("更新角色成功！！！");
+      this.dialogVisible3 = false;
+      this.getUserList();
+    },
+  },
 };
 </script>
 <style lang="less" scoped>
