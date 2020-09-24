@@ -8,6 +8,8 @@ import Rights from '../components/power/Rights.vue'
 import Roles from '../components/power/Roles.vue'
 import Categories from '../components/goods/Categories.vue'
 import Params from '../components/goods/Params.vue'
+import List from '../components/goods/List.vue'
+import Add from '../components/goods/Add.vue'
 Vue.use(VueRouter)
 
 const menu = [{
@@ -53,6 +55,16 @@ const menu = [{
         path: '/params',
         name: 'Params',
         component: Params,
+      },
+      {
+        path: '/goods',
+        name: 'List',
+        component: List,
+      },
+      {
+        path: '/goods/add',
+        name: 'Add',
+        component: Add,
       }
     ]
   },
