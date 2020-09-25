@@ -8,10 +8,15 @@ import './assets/css/global.css'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css';
 import { MessageBox } from 'element-ui';
-Vue.use(ElementUI,MessageBox)
+import VueQuillEditor from 'vue-quill-editor'
+import 'quill/dist/quill.core.css'
+import 'quill/dist/quill.snow.css'
+import 'quill/dist/quill.bubble.css'
+// import * as Quill from 'quill';
 Vue.config.productionTip = false
 import tree from 'vue-table-with-tree-grid'
 Vue.component('tree', tree)
+Vue.use(ElementUI,MessageBox,VueQuillEditor)
 //时间过滤器
 Vue.filter('dataFormat',function(originVal){
   const dt = new Date(originVal)

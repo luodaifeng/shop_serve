@@ -3,13 +3,13 @@ import VueRouter from 'vue-router'
 import Login from '../components/Login.vue'
 import Home from '../components/Home.vue'
 import Welcome from '../components/Welcome.vue'
-import Users from '../components/user/Users.vue'
 import Rights from '../components/power/Rights.vue'
 import Roles from '../components/power/Roles.vue'
 import Categories from '../components/goods/Categories.vue'
 import Params from '../components/goods/Params.vue'
 import List from '../components/goods/List.vue'
 import Add from '../components/goods/Add.vue'
+import user from './user'
 Vue.use(VueRouter)
 
 const menu = [{
@@ -31,11 +31,8 @@ const menu = [{
         name: 'Welcome',
         component: Welcome,
       },
-      {
-        path: '/users',
-        name: 'Users',
-        component: Users,
-      },
+      user
+      ,
       {
         path: '/rights',
         name: 'Rights',
