@@ -9,6 +9,7 @@ import Categories from '../components/goods/Categories.vue'
 import Params from '../components/goods/Params.vue'
 import List from '../components/goods/List.vue'
 import Add from '../components/goods/Add.vue'
+import Order from '../components/order/Order.vue'
 import user from './user'
 Vue.use(VueRouter)
 
@@ -62,6 +63,11 @@ const menu = [{
         path: '/goods/add',
         name: 'Add',
         component: Add,
+      },
+      {
+        path: '/orders',
+        name: 'Order',
+        component: Order,
       }
     ]
   },

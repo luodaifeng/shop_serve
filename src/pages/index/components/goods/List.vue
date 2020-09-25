@@ -120,7 +120,6 @@ export default {
       }
       this.goodsListData = res.data.goods;
       this.total = res.data.total;
-      console.log(res.data.goods);
     },
     handleSizeChange(newsSize) {
       //监听页数
