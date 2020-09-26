@@ -1,3 +1,5 @@
+// const { config } = require("vue/types/umd");
+
 module.exports = {
   devServer: {
     open: true, //自动打开页面
@@ -14,12 +16,23 @@ module.exports = {
   },
   pages: { //多页面开发
     index: {
-      entry: 'src/pages/index/main.js',
+      entry: 'src/pages/index/main-dev.js',
       template: 'src/pages/index/index.html',
       filename: 'index.html',
       title: 'Index Page',
     },
     //   subpage: 'src/subpage/main.js'
   },
-  publicPath: './' //打包文件路径
+  publicPath: './' ,//打包文件路径
+
+  //发布模式
+  chainWebpack:config =>{
+   config.when(process.env.NOdE_ENV === 'production',config=>{
+     config.entry('app').clear().add('./src/pages/index/main-prod.js')
+   })
+   //开发模式
+   config.when(process.env.NOdE_ENV === 'devuction',config=>{
+    config.entry('app').clear().add('./src/pages/index/main-dev.js')
+  })
+  }
 }
