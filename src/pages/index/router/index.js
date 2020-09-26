@@ -16,4 +16,6 @@ const router = new VueRouter({
    if(!tokenStr) return next('/login') //不是直接访问登录页，没有token的话强制跳转到登录页
    next()//以上都不是，直接放行
   })
+  router.afterEach(()=>{
+  })
 export default router

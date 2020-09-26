@@ -217,7 +217,7 @@ export default {
     this.getUserList();
   },
   methods: {
-    async getUserList() {
+    async getUserList() { 
       //获取user的数据
       const { data: res } = await this.axios.get("users", {
         params: this.queryInfo,
