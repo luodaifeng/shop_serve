@@ -16,7 +16,7 @@ module.exports = {
   },
   pages: { //多页面开发
     index: {
-      entry: 'src/pages/index/main-dev.js',
+      entry: 'src/pages/index/main.js',
       template: 'src/pages/index/index.html',
       filename: 'index.html',
       title: 'Index Page',
@@ -26,13 +26,13 @@ module.exports = {
   publicPath: './' ,//打包文件路径
 
   //发布模式
-  chainWebpack:config =>{
-   config.when(process.env.NOdE_ENV === 'production',config=>{
-     config.entry('app').clear().add('./src/pages/index/main-prod.js')
-   })
-   //开发模式
-   config.when(process.env.NOdE_ENV === 'devuction',config=>{
-    config.entry('app').clear().add('./src/pages/index/main-dev.js')
-  })
-  }
+  // chainWebpack:config =>{
+  //  config.when(process.env.NOdE_ENV === 'production',config=>{
+  //    config.entry('app').clear().add('./src/pages/index/main-prod.js')
+  //  })
+  //  //开发模式
+  //  config.when(process.env.NOdE_ENV === 'devuction',config=>{
+  //   config.entry('app').clear().add('./src/pages/index/main-dev.js')
+  // })
+  // }
 }
